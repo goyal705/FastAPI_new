@@ -25,7 +25,7 @@ jobs:
       - name: Install Railway CLI
         run: npm install -g @railway/cli@latest
 
-      - name: Deploy
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: railway up --token $RAILWAY_TOKEN --detach
+      - name: Deploy to Railway
+        uses: railwayapp/action@v1
+        with:
+          token: ${{ secrets.RAILWAY_TOKEN }}
