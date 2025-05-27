@@ -28,7 +28,10 @@ jobs:
       - name: Verify Railway CLI
         run: railway --version
 
+      - name: Print Token
+        run: echo ${{ secrets.RAILWAY_TOKEN }}
+
       - name: Deploy to Railway
-        uses: railwayapp/railway-action@v1
+        uses: railwayapp/[email protected]
         with:
           token: ${{ secrets.RAILWAY_TOKEN }}
