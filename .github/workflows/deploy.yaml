@@ -3,7 +3,7 @@ name: Deploy to Railway
 on:
   push:
     branches:
-      - main  # or your desired branch
+      - main  # or your preferred branch
 
 jobs:
   deploy:
@@ -17,11 +17,18 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Install Railway CLI
-        run: curl -fsSL https://railway.app/install.sh | sh
+      # Install dependencies if needed (example for Python)
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
+      # Install Railway CLI (pinned to specific version)
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli@latest
+
+      # Deploy to Railway
       - name: Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway up
+          railway login --token $RAILWAY_TOKEN
+          railway up --detach
