@@ -25,7 +25,10 @@ jobs:
       - name: Install Railway CLI
         run: npm install -g @railway/cli@latest
 
+      - name: Verify Railway CLI
+        run: railway --version
+
       - name: Deploy to Railway
-        uses: railwayapp/actions@v2
+        uses: railwayapp/railway-action@v1
         with:
           token: ${{ secrets.RAILWAY_TOKEN }}
