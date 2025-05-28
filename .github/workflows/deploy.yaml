@@ -32,6 +32,9 @@ jobs:
         run: echo ${{ secrets.RAILWAY_TOKEN }}
 
       - name: Deploy to Railway
-        uses: railwayapp/[email protected]
-        with:
-          token: ${{ secrets.RAILWAY_TOKEN }}
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          curl -fsSL https://railway.app/install.sh | sh
+          echo "$RAILWAY_TOKEN" | railway login
+          railway up
