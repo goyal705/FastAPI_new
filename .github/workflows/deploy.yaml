@@ -36,5 +36,6 @@ jobs:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
           curl -fsSL https://railway.app/install.sh | sh
-          echo "$RAILWAY_TOKEN" | railway login
+          echo "$RAILWAY_TOKEN" > ~/.railway.token
+          railway login --ci-token ~/.railway.token
           railway up
