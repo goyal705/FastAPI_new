@@ -25,14 +25,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Install Railway CLI
-        run: |
-          curl -fsSL https://railway.app/install.sh | sh
-          railway help
+      - name: Set up Railway CLI
+        run: npm install -g @railway/cli
 
       - name: Deploy to Railway
         env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          railway up --service=18c57678-73cd-4a69-ac3b-6a0bf943e2c2
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: railway up --service=${{ secrets.SVC_ID }}
 
