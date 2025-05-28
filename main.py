@@ -1,5 +1,5 @@
 from fastapi import FastAPI
- 
+from .database import *
 app = FastAPI()
  
 @app.get('/')
@@ -19,4 +19,7 @@ def printname(name):
  
 @app.get('/blog/{blog_id}')
 def blog(blog_id:int):
-    return {"status":True,"message":blog_id}
+    for single in mydb:
+        if blog_id == single["blog"]:
+            return {"status":True,"message":{"blog_name":single["name"]}}
+    return {"status":False,"message":"No Blog Found For Given ID"}
