@@ -26,7 +26,9 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Install Railway CLI
-        run: curl -fsSL https://railway.app/install.sh | sh
+        run: |
+          curl -fsSL https://railway.app/install.sh | sh
+          railway help
 
       - name: Deploy to Railway
         env:
