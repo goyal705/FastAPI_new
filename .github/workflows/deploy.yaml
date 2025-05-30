@@ -3,7 +3,7 @@ name: Deploy to Railway
 on:
   push:
     branches:
-      - main  # or your preferred branch
+      - main
 
 jobs:
   deploy:
@@ -11,7 +11,6 @@ jobs:
     env:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
       SVC_ID: 18c57678-73cd-4a69-ac3b-6a0bf943e2c2
-  # replace with your actual service ID
 
     steps:
       - name: Checkout repo
@@ -29,8 +28,6 @@ jobs:
         run: npm install -g @railway/cli
 
       - name: Deploy to Railway
-        uses: railwayapp/cli-action@v1
-        with:
-          command: up
+        run: railway up
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
