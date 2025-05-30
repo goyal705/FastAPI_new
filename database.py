@@ -14,6 +14,13 @@ SESSION_LOCAL = sessionmaker(bind=engine,autoflush=False,autocommit=False)
 
 Base = declarative_base()
 
+def get_db():
+    db = SESSION_LOCAL()
+    try:
+        yield db
+    finally:
+        db.close()
+
 mydb = [
     {"blog": 1, "name": "BLog1"},
     {"blog": 2, "name": "BLog2"},

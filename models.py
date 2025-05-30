@@ -1,7 +1,8 @@
 from database import *
-from sqlalchemy import Column,Integer,String,Boolean,Text,DateTime,BigInteger
+from sqlalchemy import Column,Integer,String,Boolean,Text,DateTime,BigInteger,ForeignKey
 from sqlalchemy.sql import func
 from passlib.context import CryptContext
+from sqlalchemy.orm import relationship
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -10,9 +11,11 @@ class Blog(Base):
     
     id = Column(Integer,primary_key=True,index=True)
     title = Column(String)
-    author = Column(String)
+    author = Column(Integer,ForeignKey("users.user_id"))
     published = Column(Boolean)
     context = Column(Text)
+    user = relationship("Users", back_populates="blogs")
+    #BLog.user gives full Users object
 
 class Users(Base):
     __tablename__ = "users"
@@ -26,6 +29,10 @@ class Users(Base):
     role = Column(String)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     is_active = Column(Boolean, default=True) #default is true
+    
+    blogs = relationship("Blog", back_populates="user", cascade="all, delete-orphan")
+    #same Users.blogs gives all the blog objects for the user object
+
 
     def set_password(self, plain_password: str):
         self.password = pwd_context.hash(plain_password)

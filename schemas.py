@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional,List
 from pydantic import BaseModel,field_validator,EmailStr
 from datetime import datetime
 import re
@@ -6,7 +6,7 @@ import re
 class Blogs(BaseModel):
     # id: int
     title: str
-    author: str
+    author: int
     published: Optional[bool]
     content: str
     
@@ -57,3 +57,44 @@ class UserOut(BaseModel):
 
     class Config:
         orm_mode = True
+
+class AuthorResponse(BaseModel):
+    # user_id: int
+    name: str
+    email: str
+
+    class Config:
+        orm_mode = True
+
+class BlogResponse(BaseModel):
+    id: int
+    title: str
+    published: bool
+    context: str
+    # author: int
+    user: AuthorResponse  # This will pull the author details
+
+    class Config:
+        orm_mode = True
+        
+class BlogsUser(BaseModel):
+    author: AuthorResponse
+    blogs:List[BlogResponse]
+    
+    class Config:
+        orm_mode = True
+        
+class Login(BaseModel):
+    username:str
+    password:str
+    
+    class Config:
+        orm_mode = True
+        
+class Token(BaseModel):
+    access_token:str
+    token_type:str
+    
+class TokenData(BaseModel):
+    user_id:int
+    role:str
