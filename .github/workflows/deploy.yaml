@@ -28,6 +28,7 @@ jobs:
         run: npm install -g @railway/cli
 
       - name: Deploy to Railway
-        run: railway up
+        run: railway up --service $SVC_ID
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          SVC_ID: 18c57678-73cd-4a69-ac3b-6a0bf943e2c2
