@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta, timezone
 from database import *
 from sqlalchemy import Column,Integer,String,Boolean,Text,DateTime,BigInteger,ForeignKey
 from sqlalchemy.sql import func
@@ -43,6 +44,7 @@ class Users(Base):
     is_active = Column(Boolean, default=True) #default is true
     
     blogs = relationship("Blog", back_populates="user", cascade="all, delete-orphan")
+    otp = relationship("OtpRecords", back_populates="user")
     #same Users.blogs gives all the blog objects for the user object
 
 
@@ -52,3 +54,14 @@ class Users(Base):
     def verify_password(self, plain_password: str):
         return pwd_context.verify(plain_password, self.password)
 
+class OtpRecords(Base):
+    __tablename__ = "otprecords"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer,ForeignKey("users.user_id"))
+    mobile_no = Column(BigInteger)
+    otp = Column(Integer)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    expire_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc) + timedelta(minutes=15))
+    
+    user = relationship("Users",back_populates="otp")
