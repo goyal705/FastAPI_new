@@ -15,7 +15,19 @@ class Blog(Base):
     published = Column(Boolean)
     context = Column(Text)
     user = relationship("Users", back_populates="blogs")
+    comments = relationship("Comments",back_populates="blog", cascade="all, delete-orphan")
     #BLog.user gives full Users object
+    
+class Comments(Base):
+    __tablename__ = "comments"
+    
+    id = Column(Integer,primary_key=True,index=True)
+    publisher_name = Column(String)
+    title = Column(String)
+    blog_id = Column(Integer,ForeignKey("blogs.id"))
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    
+    blog = relationship("Blog",back_populates="comments")
 
 class Users(Base):
     __tablename__ = "users"

@@ -98,3 +98,9 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     user_id:int
     role:str
+    
+class Comment(BaseModel):
+    blog_id:int
+    title:str
+    class Config:
+        orm_mode = True
