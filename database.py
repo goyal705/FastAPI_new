@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
 
-# load_dotenv()
+load_dotenv()
 db_pass = os.getenv("db_pass")
 DATABASE_URL = os.environ.get("DATABASE_URL").format(db_pass)
 
