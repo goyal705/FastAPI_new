@@ -83,8 +83,8 @@ def get_user_details(response:Response,request: Request, _=Depends(verify_access
     return user
 
 @router.post("/send-otp")
-def send_otp(response:Response ,mobile_no:int, db: Session = Depends(get_db)):
-    user = db.query(Users).filter(Users.mobile == mobile_no).first()
+def send_otp(response:Response ,request:SendOtpRequest, db: Session = Depends(get_db)):
+    user = db.query(Users).filter(Users.mobile == request.mobile_no).first()
     if not user:
         response.status_code = 404
         return {
@@ -125,10 +125,10 @@ def send_otp(response:Response ,mobile_no:int, db: Session = Depends(get_db)):
     }
     
 @router.post("/verify-otp")
-def verify_otp(response:Response ,mobile_no:int,otp:int, db: Session = Depends(get_db)):
+def verify_otp(response:Response ,request:OtpVerificationRequest, db: Session = Depends(get_db)):
     otp_entry = (
             db.query(OtpRecords)
-            .filter(OtpRecords.mobile_no == mobile_no,OtpRecords.otp == otp)
+            .filter(OtpRecords.mobile_no == request.mobile_no,OtpRecords.otp == request.otp)
             .order_by(desc(OtpRecords.created_at))
             .first()
     )
