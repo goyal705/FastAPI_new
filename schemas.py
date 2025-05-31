@@ -104,3 +104,10 @@ class Comment(BaseModel):
     title:str
     class Config:
         orm_mode = True
+
+class OtpVerificationRequest(BaseModel):
+    mobile_no: int
+    otp: int
+    
+class SendOtpRequest(BaseModel):
+    mobile_no: int
