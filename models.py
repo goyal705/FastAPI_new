@@ -65,3 +65,23 @@ class OtpRecords(Base):
     expire_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc) + timedelta(minutes=15))
     
     user = relationship("Users",back_populates="otp")
+    
+class AdminRecords(Base):
+    __tablename__ = "adminrecords"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    admin_user_id  = Column(Integer,ForeignKey("users.user_id"))
+    name = Column(String, nullable=False)
+    username = Column(String, unique=True, index=True, nullable=False)
+    mobile = Column(BigInteger, unique=True)
+    email = Column(String, unique=True, nullable=False)
+    password = Column(String, nullable=False)
+    role = Column(String)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    is_active = Column(Boolean, default=True) #default is true
+    
+    approved = Column(Boolean,default=False)
+    
+    def set_password(self, plain_password: str):
+        self.password = pwd_context.hash(plain_password)
+    

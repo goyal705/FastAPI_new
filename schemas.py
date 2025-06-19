@@ -20,7 +20,7 @@ class User(BaseModel):
     mobile: int
     email: str
     password: str
-    role: str
+    # role: str
 
     @field_validator("mobile")
     @classmethod
@@ -111,3 +111,7 @@ class OtpVerificationRequest(BaseModel):
     
 class SendOtpRequest(BaseModel):
     mobile_no: int
+    
+class AdminApproveRejectRequest(BaseModel):
+    username:str
+    action:str
