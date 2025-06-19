@@ -33,20 +33,25 @@ def create_user(request:User, response: Response ,db: Session = Depends(get_db))
         response.status_code = status.HTTP_400_BAD_REQUEST
         return {"status": False, "message": detail}
     
-    new_user = Users(
+    admin = db.query(Users).filter(
+        Users.user_id == 3
+    ).first()
+    
+    admin_record = AdminRecords(
+        admin_user_id=admin.user_id,
         name=request.name,
         username=request.username,
         mobile=request.mobile,
         email=request.email,
-        role=request.role
+        role="User"
     )
     
-    new_user.set_password(request.password)
-    db.add(new_user)
+    admin_record.set_password(request.password)
+    db.add(admin_record)
     db.commit()
-    db.refresh(new_user)
+    db.refresh(admin_record)
     
-    return new_user
+    return {"status":True,"message":"Request sent to admin for approval"}
 
 @router.post("/login")
 def login(request: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
@@ -62,8 +67,14 @@ def login(request: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Password matching failed"
         )
+        
+    if not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User Profile Deactivated By Admin"
+        ) 
 
-    access_token = create_access_token(data={"user_id": user.user_id})
+    access_token = create_access_token(data={"user_id": user.user_id,"role":user.role})
     return {
         "access_token": access_token,
         "token_type": "bearer"

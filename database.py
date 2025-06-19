@@ -6,6 +6,8 @@ import os
 
 load_dotenv()
 db_pass = os.getenv("db_pass")
+# print("db_pass",db_pass)
+db_pass = "AVNS_i4-D6sp7v-GJggvkclF"
 DATABASE_URL = os.environ.get("DATABASE_URL").format(db_pass)
 
 engine = create_engine(DATABASE_URL)
